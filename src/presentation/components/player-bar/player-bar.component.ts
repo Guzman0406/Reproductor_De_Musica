@@ -1,8 +1,8 @@
 import { Component, Directive, Inject } from '@angular/core';
 import { CommonModule, AsyncPipe, DecimalPipe } from '@angular/common';
-import { IPlayerService } from '../../app/aplication/player.service';
+import { IPlayerService } from '../../../app/aplication/player.service';
 import { Observable } from 'rxjs';
-import { PlayerState } from '../../app/aplication/player.service';
+import { PlayerState } from '../../../app/aplication/player.service';
 
 
 @Component({

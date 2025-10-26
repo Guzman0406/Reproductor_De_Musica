@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { PlayerBarComponent } from '../../components/player-bar.component';
+import { PlayerBarComponent } from '../../components/player-bar/player-bar.component';
+import { SidebarComponent } from '../../components/sidebar/sidebar.component'; 
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterModule, PlayerBarComponent], // Importa el PlayerBar
+  imports: [RouterModule, PlayerBarComponent, SidebarComponent], // Importa el PlayerBar
   template: `
     <div class="main-layout">
       <aside class="sidebar">

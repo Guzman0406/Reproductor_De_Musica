@@ -19,6 +19,10 @@ export const routes: Routes = [
         path: 'home', 
         component: HomeComponent
       },
+      { 
+        path: 'playlist/:id', 
+        loadComponent: () => import('../presentation/pages/playlist/playlist.component').then(m => m.PlaylistComponent)
+      },
     ]
   }
 ];

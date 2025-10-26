@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { Playlist } from '../../app/core/domain/models/playlist.model';
-import { ISpotifyRepository } from '../../app/core/domain/ports/spotify.repository';
+import { ISpotifyRepository} from '../../app/core/domain/ports/spotify.repositori';
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +15,13 @@ export class SpotifyApiService extends ISpotifyRepository {
   }
 
   override getPlaylistById(id: string): Observable<Playlist> {
-    
+
     return this.http.get<Playlist>(`${this.baseUrl}/playlists/${id}`).pipe(
       map(playlist => ({
         ...playlist,
         tracks: {
           ...playlist.tracks,
-          items: playlist.tracks.items.filter(item => item.track && item.track.preview_url) 
+          items: playlist.tracks.items.filter(item => item.track && item.track.preview_url)
         }
       }))
     );
