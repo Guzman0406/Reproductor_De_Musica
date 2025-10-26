@@ -5,6 +5,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 import { SpotifyAuthInterceptor } from '../infraestructure/driven-adapters/spotify-auth.interceptor';
 import { ISpotifyRepository } from './core/domain/ports/spotify.repository';
 import { SpotifyApiService } from '../infraestructure/driven-adapters/spotify-api.service';
+import { IPlayerService, PlayerService } from './aplication/player.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,6 +16,7 @@ export const appConfig: ApplicationConfig = {
       useClass: SpotifyAuthInterceptor,
       multi: true
     },
-    { provide: ISpotifyRepository, useClass: SpotifyApiService}
+    { provide: ISpotifyRepository, useClass: SpotifyApiService},
+    {provide: IPlayerService, useClass: PlayerService}
   ]
 };
