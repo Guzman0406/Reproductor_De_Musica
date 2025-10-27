@@ -6,6 +6,7 @@ import { Song} from '../../../domain/models/song.model';
   selector: 'app-song-display',
   templateUrl: './song-display.html',
   styleUrls: ['./song-display.scss'],
+  standalone: false
 })
 export class SongDisplayComponent {
   @Input() currentSong: Song | null = null;

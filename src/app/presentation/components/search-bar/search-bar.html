@@ -3,6 +3,7 @@
     type="text"
     placeholder="Busca artistas o canciones..."
     [(ngModel)]="query"
+    (ngModelChange)="onQueryChange()"
     (keyup.enter)="onSearch()"
   />
   <button (click)="onSearch()">Buscar</button>

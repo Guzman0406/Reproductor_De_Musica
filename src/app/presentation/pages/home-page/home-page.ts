@@ -15,6 +15,7 @@ import { PlayerState, Song} from '../../../domain/models/song.model';
   selector: 'app-home-page',
   templateUrl: './home-page.html', // Corregido
   styleUrls: ['./home-page.scss'], // Corregido
+  standalone: false
 })
 export class HomePageComponent implements OnDestroy {
   public searchResults$: Observable<Song[]>;
@@ -34,6 +35,11 @@ export class HomePageComponent implements OnDestroy {
 
 
   handleSearch(query: string): void {
+    this.searchResults$ = this.searchService.searchSongs(query);
+  }
+
+  handleSuggestion(query: string): void {
+    // Manejar las sugerencias en tiempo real
     this.searchResults$ = this.searchService.searchSongs(query);
   }
 

@@ -8,8 +8,17 @@
 }
 
 .main-header {
-  padding: 10px;
+  padding: 20px 10px 10px;
   background: linear-gradient(to bottom, #222, #121212);
+
+  .app-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0 0 20px 0;
+    color: #1db954;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
 }
 
 .content-area {

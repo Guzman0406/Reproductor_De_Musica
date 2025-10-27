@@ -1,13 +1,23 @@
-<ul class="results-list">
-  <li
-    *ngFor="let song of songs; let i = index"
-    class="song-item"
-    (click)="onSongClick(i)"
-  >
-    <img [src]="song.imageUrl" [alt]="song.album" class="album-art" />
-    <div class="song-info">
-      <div class="song-title">{{ song.title }}</div>
-      <div class="song-artist">{{ song.artist }}</div>
+<div class="results-container">
+  <ul class="results-list" *ngIf="songs.length > 0; else emptyState">
+    <li
+      *ngFor="let song of songs; let i = index"
+      class="song-item"
+      (click)="onSongClick(i)"
+    >
+      <img [src]="song.imageUrl" [alt]="song.album" class="album-art" />
+      <div class="song-info">
+        <div class="song-title">{{ song.title }}</div>
+        <div class="song-artist">{{ song.artist }}</div>
+      </div>
+    </li>
+  </ul>
+
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <div class="empty-icon">🎵</div>
+      <h2>Busca tu música favorita</h2>
+      <p>Escribe el nombre de una canción o artista en el buscador para comenzar</p>
     </div>
-  </li>
-</ul>
+  </ng-template>
+</div>

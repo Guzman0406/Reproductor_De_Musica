@@ -13,6 +13,14 @@
     outline: none;
     background: #282828;
     color: white;
+
+    &::placeholder {
+      color: #b3b3b3;
+    }
+
+    &:focus {
+      background: #333;
+    }
   }
 
   button {
@@ -27,6 +35,10 @@
 
     &:hover {
       background: #1ed760;
+    }
+
+    &:active {
+      transform: scale(0.98);
     }
   }
 }

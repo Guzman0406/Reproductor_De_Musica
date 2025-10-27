@@ -6,6 +6,7 @@ import { Song} from '../../../domain/models/song.model';
   selector: 'app-search-results',
   templateUrl: './search-results.html',
   styleUrls: ['./search-results.scss'],
+  standalone: false
 })
 export class SearchResultsComponent {
   @Input() songs: Song[] = [];

@@ -1,6 +1,10 @@
 <main class="main-container">
   <header class="main-header">
-    <app-search-bar (search)="handleSearch($event)"></app-search-bar>
+    <h1 class="app-title">Reproductor de Música</h1>
+    <app-search-bar
+      (search)="handleSearch($event)"
+      (querySuggestion)="handleSuggestion($event)">
+    </app-search-bar>
   </header>
 
   <section class="content-area">
@@ -12,7 +16,7 @@
 
   <footer class="player-bar">
     <app-song-display
-      [currentSong]="playerState.currentSong"
+      [currentSong]="playerState?.currentSong || null"
     ></app-song-display>
     <app-player-controls
       (next)="handleNext()"
