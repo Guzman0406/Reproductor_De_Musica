@@ -1,1 +1,13 @@
-<p>search-results works!</p>
+<ul class="results-list">
+  <li
+    *ngFor="let song of songs; let i = index"
+    class="song-item"
+    (click)="onSongClick(i)"
+  >
+    <img [src]="song.imageUrl" [alt]="song.album" class="album-art" />
+    <div class="song-info">
+      <div class="song-title">{{ song.title }}</div>
+      <div class="song-artist">{{ song.artist }}</div>
+    </div>
+  </li>
+</ul>

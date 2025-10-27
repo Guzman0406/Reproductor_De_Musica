@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-player-controls',
-  imports: [],
   templateUrl: './player-controls.html',
-  styleUrl: './player-controls.scss',
+  styleUrls: ['./player-controls.scss'],
 })
-export class PlayerControls {
-
+export class PlayerControlsComponent {
+  @Input() isPlaying: boolean = false;
+  @Output() previous = new EventEmitter<void>();
+  @Output() next = new EventEmitter<void>();
 }

@@ -1,0 +1,54 @@
+.display-container {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: #181818;
+  border-radius: 8px;
+  min-height: 100px;
+  max-width: 300px;
+}
+
+.placeholder {
+  justify-content: center;
+  color: #b3b3b3;
+}
+
+.current-album-art {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  margin-right: 15px;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.current-song-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.current-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.current-artist {
+  font-size: 0.85rem;
+  color: #b3b3b3;
+  margin-top: 4px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.current-album {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 2px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

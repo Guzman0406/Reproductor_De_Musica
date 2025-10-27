@@ -4,7 +4,7 @@ export interface Song {
   artist: string;
   album: string;
   imageUrl: string;
-  previewUrl: string | null; // URL para previsualizar 30s
+  previewUrl: string | null;
 }
 
 export interface PlayerState {

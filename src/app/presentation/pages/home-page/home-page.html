@@ -1,1 +1,22 @@
-<p>home-page works!</p>
+<main class="main-container">
+  <header class="main-header">
+    <app-search-bar (search)="handleSearch($event)"></app-search-bar>
+  </header>
+
+  <section class="content-area">
+    <app-search-results
+      [songs]="(searchResults$ | async) || []"
+      (songSelected)="handleSongSelected($event)"
+    ></app-search-results>
+  </section>
+
+  <footer class="player-bar">
+    <app-song-display
+      [currentSong]="playerState.currentSong"
+    ></app-song-display>
+    <app-player-controls
+      (next)="handleNext()"
+      (previous)="handlePrevious()"
+    ></app-player-controls>
+  </footer>
+</main>

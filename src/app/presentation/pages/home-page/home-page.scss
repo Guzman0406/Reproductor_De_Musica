@@ -1,0 +1,42 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background-color: #121212;
+  color: #fff;
+}
+
+.main-header {
+  padding: 10px;
+  background: linear-gradient(to bottom, #222, #121212);
+}
+
+.content-area {
+  flex-grow: 1;
+  overflow-y: auto; // Permite scroll en los resultados
+  padding: 0 20px;
+}
+
+.player-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; // Divide la barra en 3
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #181818;
+  border-top: 1px solid #282828;
+  width: 100%;
+  box-sizing: border-box;
+
+  // app-song-display está en la primera columna
+  app-song-display {
+    grid-column: 1 / 2;
+    justify-self: start;
+  }
+
+  // app-player-controls está en la segunda (centro)
+  app-player-controls {
+    grid-column: 2 / 3;
+    justify-self: center;
+  }
+}

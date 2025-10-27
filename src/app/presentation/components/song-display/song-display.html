@@ -1,1 +1,19 @@
-<p>song-display works!</p>
+<div class="display-container" *ngIf="currentSong; else noSong">
+  <img
+    [src]="currentSong.imageUrl"
+    [alt]="currentSong.album"
+    class="current-album-art"
+  />
+  <div class="current-song-info">
+    <div class="current-title">{{ currentSong.title }}</div>
+    <div class="current-artist">{{ currentSong.artist }}</div>
+    <div class="current-album">{{ currentSong.album }}</div>
+  </div>
+</div>
+<ng-template #noSong>
+  <div class="display-container placeholder">
+    <div class="current-song-info">
+      <div class="current-title">Busca y selecciona una canción</div>
+    </div>
+  </div>
+</ng-template>
