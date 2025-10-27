@@ -1,29 +1,46 @@
+// src/app/app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
-import { App } from './app';
-
+import { AppComponent } from './app';
 
 import { SongRepository } from './domain/ports/song.repository';
 import { SpotifyAdapter } from './infrastructure/spotify/spotify.adapter';
 import { AuthInterceptor } from './infrastructure/spotify/auth.interceptor';
 
+import { HomePageComponent } from './presentation/pages/home-page/home-page.component';
+import { SearchBarComponent } from './presentation/components/search-bar/search-bar.component';
+import { SongDisplayComponent } from './presentation/components/song-display/song-display.component';
+import { PlayerControlsComponent } from './presentation/components/player-controls/player-controls.component';
+import { SearchResultsComponent } from './presentation/components/search-results/search-results.component';
+
 @NgModule({
-  imports: [BrowserModule, App],
+  declarations: [
+    AppComponent,
+    HomePageComponent,
+    SearchBarComponent,
+    SongDisplayComponent,
+    PlayerControlsComponent,
+    SearchResultsComponent,
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+  ],
   providers: [
-    provideHttpClient(withInterceptorsFromDi()),
     {
       provide: SongRepository,
       useClass: SpotifyAdapter,
     },
-    
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
     },
   ],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
