@@ -2,12 +2,15 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
+// Componente de la barra de busqueda
 @Component({
   selector: 'app-search-bar',
   templateUrl: './search-bar.html',
   styleUrls: ['./search-bar.scss'],
   standalone: false
 })
+
+// Clase de la barra de busqueda
 export class SearchBarComponent {
   @Output() search = new EventEmitter<string>();
   @Output() querySuggestion = new EventEmitter<string>();
@@ -18,7 +21,7 @@ export class SearchBarComponent {
   constructor() {
     this.querySubject
       .pipe(
-        debounceTime(300),
+        debounceTime(300), // espera 300 ms para agrupar tecleo y evitar llamadas innecesarias
         distinctUntilChanged()
       )
       .subscribe((query) => {

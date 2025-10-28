@@ -6,6 +6,7 @@ import { SongRepository } from '../domain/ports/song.repository';
 @Injectable({
   providedIn: 'root',
 })
+
 export class SearchService {
   constructor(private songRepository: SongRepository) {}
 

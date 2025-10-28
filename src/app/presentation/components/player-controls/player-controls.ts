@@ -6,8 +6,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./player-controls.scss'],
   standalone: false
 })
-export class PlayerControlsComponent {
-  @Input() isPlaying: boolean = false;
-  @Output() previous = new EventEmitter<void>();
-  @Output() next = new EventEmitter<void>();
+
+export class PlayerControlsComponent { // Clase del reproductor
+  @Input() isPlaying: boolean = false; // Estado del reproductor
+  @Output() previous = new EventEmitter<void>(); // canción anterior
+  @Output() next = new EventEmitter<void>(); // siguiente canción
 }

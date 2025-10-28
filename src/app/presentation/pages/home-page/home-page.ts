@@ -11,12 +11,16 @@ import { SearchService} from '../../../application/search.service';
 //import { PlayerState, Song } from 'src/app/domain/models/song.model';
 import { PlayerState, Song} from '../../../domain/models/song.model';
 
+
+// Componente de la página principal
 @Component({
   selector: 'app-home-page',
-  templateUrl: './home-page.html', // Corregido
-  styleUrls: ['./home-page.scss'], // Corregido
+  templateUrl: './home-page.html', 
+  styleUrls: ['./home-page.scss'], 
   standalone: false
 })
+
+// Clase de la página principal
 export class HomePageComponent implements OnDestroy {
   public searchResults$: Observable<Song[]>;
   public playerState: PlayerState | undefined;
@@ -34,6 +38,7 @@ export class HomePageComponent implements OnDestroy {
   }
 
 
+  // Manejar la búsqueda de canciones
   handleSearch(query: string): void {
     this.searchResults$ = this.searchService.searchSongs(query);
   }
@@ -43,6 +48,7 @@ export class HomePageComponent implements OnDestroy {
     this.searchResults$ = this.searchService.searchSongs(query);
   }
 
+  // Manejar la selección de una canción
   handleSongSelected(index: number): void {
     this.searchResults$.pipe(take(1)).subscribe(songs => {
       if (songs && songs.length > index) {

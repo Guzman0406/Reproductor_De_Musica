@@ -41,11 +41,14 @@ export class SpotifyAdapter extends SongRepository {
       .set('type', 'track')
       .set('limit', '20');
 
+    // Realizar la solicitud a la API de Spotify
     return this.http
       .get<SpotifySearchResponse>(`${this.apiUrl}/search`, { params })
       .pipe(map(response => this.mapToSongs(response.tracks.items)));
   }
 
+
+  // Implementación del método para obtener una canción por su ID
   override getTrack(id: string): Observable<Song | null> {
     return this.http.get<SpotifyTrack>(`${this.apiUrl}/tracks/${id}`).pipe(
       map(track => {
@@ -62,6 +65,7 @@ export class SpotifyAdapter extends SongRepository {
     );
   }
 
+  // Limpia y organiza los datos devueltos para un formato sencillo de canciones
   private mapToSongs(items: SpotifyTrack[]): Song[] {
     return items.map(item => ({
       id: item.id,

@@ -8,6 +8,7 @@ import {
 import { Observable, switchMap, take, filter } from 'rxjs';
 import { SpotifyAuthService } from './spotify-auth.service';
 
+
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: SpotifyAuthService) {}

@@ -14,7 +14,7 @@ export class PlayerService {
 
   private state$ = new BehaviorSubject<PlayerState>(this.state);
 
-
+// Caso de uso: Obtener el estado del reproductor
   public getState(): Observable<PlayerState> {
     return this.state$.asObservable();
   }
