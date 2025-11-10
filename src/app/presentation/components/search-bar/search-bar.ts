@@ -1,13 +1,16 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 // Componente de la barra de busqueda
 @Component({
   selector: 'app-search-bar',
   templateUrl: './search-bar.html',
   styleUrls: ['./search-bar.scss'],
-  standalone: false
+  standalone: true,
+  imports: [CommonModule, FormsModule],
 })
 
 // Clase de la barra de busqueda

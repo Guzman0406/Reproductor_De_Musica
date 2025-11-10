@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -11,26 +12,17 @@ import { AuthInterceptor } from './infrastructure/spotify/auth.interceptor';
 
 
 import { HomePageComponent } from './presentation/pages/home-page/home-page';
-import { SearchBarComponent } from './presentation/components/search-bar/search-bar';
-import { SongDisplayComponent } from './presentation/components/song-display/song-display';
-import { PlayerControlsComponent } from './presentation/components/player-controls/player-controls';
-import { SearchResultsComponent } from './presentation/components/search-results/search-results';
-import { AlbumHeaderComponent } from './presentation/components/album-header/album-header';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomePageComponent,
-    SearchBarComponent,
-    SongDisplayComponent,
-    PlayerControlsComponent,
-    SearchResultsComponent,
-    AlbumHeaderComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    CommonModule,
+    HomePageComponent,
   ],
   providers: [
     {

@@ -38,7 +38,11 @@
       <section class="results-section" *ngIf="artists.length > 0">
         <h2 class="section-title">Artistas</h2>
         <div class="grid-list">
-          <div *ngFor="let artist of artists" class="grid-item artist-card">
+          <div
+            *ngFor="let artist of artists"
+            class="grid-item artist-card"
+            (click)="onArtistClick(artist)"
+          >
             <img [src]="artist.imageUrl" [alt]="artist.name" class="grid-item-image" />
             <div class="grid-item-info">
               <div class="grid-item-name">{{ artist.name }}</div>

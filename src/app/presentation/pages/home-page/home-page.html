@@ -18,6 +18,7 @@
       [albums]="(albums$ | async) || []"
       (songSelected)="handleSongSelected($event)"
       (albumSelected)="handleAlbumSelected($event)"
+      (artistSelected)="handleArtistSelected($event)"
       (loadMore)="handleLoadMore()"
     ></app-search-results>
   </section>

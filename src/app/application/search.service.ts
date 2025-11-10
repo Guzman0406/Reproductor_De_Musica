@@ -25,4 +25,9 @@ export class SearchService {
   public getRecommendations(artistIds: string[]): Observable<Artist[]> {
     return this.songRepository.getRecommendations(artistIds);
   }
+
+  // Caso de uso: Obtener las canciones más populares de un artista
+  public getArtistTopTracks(artistId: string): Observable<Song[]> {
+    return this.songRepository.getArtistTopTracks(artistId);
+  }
 }

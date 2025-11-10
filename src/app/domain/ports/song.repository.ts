@@ -9,4 +9,5 @@ export abstract class SongRepository {
   abstract getTrack(id: string): Observable<Song | null>;
   abstract getAlbumTracks(albumId: string): Observable<Song[]>;
   abstract getRecommendations(artistIds: string[]): Observable<Artist[]>;
+  abstract getArtistTopTracks(artistId: string): Observable<Song[]>;
 }

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
@@ -6,12 +7,25 @@ import { SearchService } from '../../../application/search.service';
 import { Album } from '../../../domain/models/album.model';
 import { Artist } from '../../../domain/models/artist.model';
 import { PlayerState, Song } from '../../../domain/models/song.model';
+import { AlbumHeaderComponent } from '../../components/album-header/album-header';
+import { PlayerControlsComponent } from '../../components/player-controls/player-controls';
+import { SearchBarComponent } from '../../components/search-bar/search-bar';
+import { SearchResultsComponent } from '../../components/search-results/search-results';
+import { SongDisplayComponent } from '../../components/song-display/song-display';
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.html',
   styleUrls: ['./home-page.scss'],
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,
+    SearchBarComponent,
+    SearchResultsComponent,
+    SongDisplayComponent,
+    PlayerControlsComponent,
+    AlbumHeaderComponent,
+  ],
 })
 export class HomePageComponent implements OnDestroy {
   // Subjects para mantener el estado
@@ -65,6 +79,18 @@ export class HomePageComponent implements OnDestroy {
     this.searchService.getAlbumTracks(albumId).subscribe(tracks => {
       this.songs.next(tracks);
       // Ya no se limpian los artistas y álbumes
+    });
+  }
+
+  // Al seleccionar un artista, busca sus canciones más populares
+  handleArtistSelected(artistId: string): void {
+    // Limpia el álbum seleccionado cuando se selecciona un artista
+    this.selectedAlbum.next(null);
+
+    // Carga las canciones más populares del artista
+    this.searchService.getArtistTopTracks(artistId).subscribe(tracks => {
+      this.songs.next(tracks);
+      window.scrollTo(0, 0);
     });
   }
 

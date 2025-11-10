@@ -133,6 +133,17 @@ export class SpotifyAdapter extends SongRepository {
     );
   }
 
+  override getArtistTopTracks(artistId: string): Observable<Song[]> {
+    // El mercado es requerido, puedes ajustarlo según tu necesidad
+    const params = new HttpParams().set('market', 'ES');
+
+    return this.http
+      .get<{ tracks: SpotifyTrack[] }>(`${this.apiUrl}/artists/${artistId}/top-tracks`, { params })
+      .pipe(
+        map(response => this.mapToSongs(response.tracks))
+      );
+  }
+
   private mapToSongs(items: SpotifyTrack[]): Song[] {
     return items.map(item => ({
       id: item.id,
