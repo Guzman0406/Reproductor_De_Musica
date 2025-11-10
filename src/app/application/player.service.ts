@@ -42,6 +42,7 @@ export class PlayerService {
     this.playSongAtIndex(prevIndex);
   }
 
+  // Caso de uso: Reproducir la canción por indice (indice: numero de la cancion)
   private playSongAtIndex(index: number): void {
     if (this.state.playlist[index]) {
       this.state.currentIndex = index;
@@ -50,6 +51,7 @@ export class PlayerService {
     }
   }
 
+  // Caso de uso: Actualizar el estado del reproductor
   private updateState(): void {
     this.state$.next({ ...this.state });
   }
