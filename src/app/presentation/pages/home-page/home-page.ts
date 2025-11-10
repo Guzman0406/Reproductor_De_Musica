@@ -1,29 +1,32 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Observable, Subscription, of } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { switchMap, take, tap } from 'rxjs/operators';
+import { PlayerService } from '../../../application/player.service';
+import { SearchService } from '../../../application/search.service';
+import { Album } from '../../../domain/models/album.model';
+import { Artist } from '../../../domain/models/artist.model';
+import { PlayerState, Song } from '../../../domain/models/song.model';
 
-//import { PlayerService } from 'src/app/application/player.service';
-import { PlayerService} from '../../../application/player.service';
-
-//import { SearchService } from 'src/app/application/search.service';
-import { SearchService} from '../../../application/search.service';
-
-//import { PlayerState, Song } from 'src/app/domain/models/song.model';
-import { PlayerState, Song} from '../../../domain/models/song.model';
-
-
-// Componente de la página principal
 @Component({
   selector: 'app-home-page',
-  templateUrl: './home-page.html', 
-  styleUrls: ['./home-page.scss'], 
-  standalone: false
+  templateUrl: './home-page.html',
+  styleUrls: ['./home-page.scss'],
+  standalone: false,
 })
-
-// Clase de la página principal
 export class HomePageComponent implements OnDestroy {
-  public searchResults$: Observable<Song[]>;
-  public playerState: PlayerState | undefined;
+  // Subjects para mantener el estado
+  private songs = new BehaviorSubject<Song[]>([]);
+  private artists = new BehaviorSubject<Artist[]>([]);
+  private albums = new BehaviorSubject<Album[]>([]);
+  private selectedAlbum = new BehaviorSubject<Album | null>(null);
+
+  // Observables públicos para la plantilla
+  public songs$: Observable<Song[]> = this.songs.asObservable();
+  public artists$: Observable<Artist[]> = this.artists.asObservable();
+  public albums$: Observable<Album[]> = this.albums.asObservable();
+  public selectedAlbum$: Observable<Album | null> = this.selectedAlbum.asObservable();
+
+  public playerState?: PlayerState;
   private stateSubscription: Subscription;
 
   constructor(
@@ -33,28 +36,68 @@ export class HomePageComponent implements OnDestroy {
     this.stateSubscription = this.playerService
       .getState()
       .subscribe(state => (this.playerState = state));
-
-    this.searchResults$ = of([]); // Usamos of([]) para un valor inicial
   }
 
-
-  // Manejar la búsqueda de canciones
+  // Maneja la búsqueda y actualiza los resultados
   handleSearch(query: string): void {
-    this.searchResults$ = this.searchService.searchSongs(query);
-  }
+    this.selectedAlbum.next(null); // Limpia el header del álbum al buscar
+    if (!query) {
+      this.songs.next([]);
+      this.artists.next([]);
+      this.albums.next([]);
+      return;
+    }
 
-  handleSuggestion(query: string): void {
-    // Manejar las sugerencias en tiempo real
-    this.searchResults$ = this.searchService.searchSongs(query);
-  }
-
-  // Manejar la selección de una canción
-  handleSongSelected(index: number): void {
-    this.searchResults$.pipe(take(1)).subscribe(songs => {
-      if (songs && songs.length > index) {
-        this.playerService.loadPlaylist(songs, index);
-      }
+    this.searchService.search(query).subscribe(results => {
+      this.songs.next(results.songs);
+      this.artists.next(results.artists);
+      this.albums.next(results.albums);
     });
+  }
+
+  // Al seleccionar un álbum, busca sus canciones y lo establece como seleccionado
+  handleAlbumSelected(albumId: string): void {
+    // Busca el álbum completo en la lista actual para obtener sus detalles
+    const selected = this.albums.getValue().find(a => a.id === albumId);
+    this.selectedAlbum.next(selected || null);
+
+    // Carga las canciones del álbum
+    this.searchService.getAlbumTracks(albumId).subscribe(tracks => {
+      this.songs.next(tracks);
+      // Ya no se limpian los artistas y álbumes
+    });
+  }
+
+  // Carga más recomendaciones de artistas
+  handleLoadMore(): void {
+    this.artists$
+      .pipe(
+        take(1),
+        switchMap(currentArtists => {
+          const seedArtistIds = currentArtists.slice(0, 5).map(a => a.id);
+          if (seedArtistIds.length === 0) {
+            return [];
+          }
+          return this.searchService.getRecommendations(seedArtistIds);
+        }),
+        tap(newArtists => {
+          const currentArtists = this.artists.getValue();
+          this.artists.next([...currentArtists, ...newArtists]);
+        })
+      )
+      .subscribe();
+  }
+
+  // Carga la canción seleccionada en el reproductor
+  handleSongSelected(song: Song): void {
+    this.songs$
+      .pipe(take(1))
+      .subscribe(songs => {
+        const songIndex = songs.findIndex(s => s.id === song.id);
+        if (songIndex !== -1) {
+          this.playerService.loadPlaylist(songs, songIndex);
+        }
+      });
   }
 
   handleNext(): void {

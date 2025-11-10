@@ -15,6 +15,7 @@ import { SearchBarComponent } from './presentation/components/search-bar/search-
 import { SongDisplayComponent } from './presentation/components/song-display/song-display';
 import { PlayerControlsComponent } from './presentation/components/player-controls/player-controls';
 import { SearchResultsComponent } from './presentation/components/search-results/search-results';
+import { AlbumHeaderComponent } from './presentation/components/album-header/album-header';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { SearchResultsComponent } from './presentation/components/search-results
     SongDisplayComponent,
     PlayerControlsComponent,
     SearchResultsComponent,
+    AlbumHeaderComponent,
   ],
   imports: [
     BrowserModule,

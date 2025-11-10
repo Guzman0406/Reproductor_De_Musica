@@ -1,18 +1,39 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-//import { Song } from 'src/app/domain/models/song.model';
-import { Song} from '../../../domain/models/song.model';
+import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
+import { Album } from '../../../domain/models/album.model';
+import { Artist } from '../../../domain/models/artist.model';
+import { Song } from '../../../domain/models/song.model';
 
 @Component({
   selector: 'app-search-results',
   templateUrl: './search-results.html',
   styleUrls: ['./search-results.scss'],
-  standalone: false
+  standalone: false,
 })
 export class SearchResultsComponent {
   @Input() songs: Song[] = [];
-  @Output() songSelected = new EventEmitter<number>(); // Emite el índice
+  @Input() artists: Artist[] = [];
+  @Input() albums: Album[] = [];
 
-  onSongClick(index: number): void {
-    this.songSelected.emit(index);
+  @Output() songSelected = new EventEmitter<Song>();
+  @Output() albumSelected = new EventEmitter<string>();
+  @Output() loadMore = new EventEmitter<void>();
+
+  // Emite la canción seleccionada
+  onSongClick(song: Song): void {
+    this.songSelected.emit(song);
+  }
+
+  // Emite el ID del álbum seleccionado
+  onAlbumClick(album: Album): void {
+    this.albumSelected.emit(album.id);
+  }
+
+  // Detecta el scroll para el "infinite scroll"
+  @HostListener('window:scroll')
+  onScroll(): void {
+    // Si el usuario llega casi al final de la página, emite el evento para cargar más
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+      this.loadMore.emit();
+    }
   }
 }

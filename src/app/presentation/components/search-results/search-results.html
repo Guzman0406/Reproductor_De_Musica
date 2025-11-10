@@ -1,23 +1,68 @@
 <div class="results-container">
-  <ul class="results-list" *ngIf="songs.length > 0; else emptyState">
-    <li
-      *ngFor="let song of songs; let i = index"
-      class="song-item"
-      (click)="onSongClick(i)"
-    >
-      <img [src]="song.imageUrl" [alt]="song.album" class="album-art" />
-      <div class="song-info">
-        <div class="song-title">{{ song.title }}</div>
-        <div class="song-artist">{{ song.artist }}</div>
-      </div>
-    </li>
-  </ul>
-
+  <!-- Estado inicial o sin resultados -->
   <ng-template #emptyState>
     <div class="empty-state">
       <div class="empty-icon">🎵</div>
       <h2>Busca tu música favorita</h2>
-      <p>Escribe el nombre de una canción o artista en el buscador para comenzar</p>
+      <p>Escribe el nombre de una canción, artista o álbum para comenzar.</p>
     </div>
   </ng-template>
+
+  <!-- Contenedor de todos los resultados -->
+  <div
+    class="results-grid-container"
+    *ngIf="songs.length > 0 || artists.length > 0 || albums.length > 0; else emptyState"
+  >
+    <!-- Columna Principal: Canciones -->
+    <div class="main-content">
+      <section class="results-section" *ngIf="songs.length > 0">
+        <h2 class="section-title">Canciones</h2>
+        <ul class="song-list">
+          <li
+            *ngFor="let song of songs"
+            class="song-item"
+            (click)="onSongClick(song)"
+          >
+            <img [src]="song.imageUrl" [alt]="song.album" class="album-art" />
+            <div class="song-info">
+              <div class="song-title">{{ song.title }}</div>
+              <div class="song-artist">{{ song.artist }}</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- Barra Lateral: Artistas y Álbumes -->
+    <div class="sidebar-content">
+      <section class="results-section" *ngIf="artists.length > 0">
+        <h2 class="section-title">Artistas</h2>
+        <div class="grid-list">
+          <div *ngFor="let artist of artists" class="grid-item artist-card">
+            <img [src]="artist.imageUrl" [alt]="artist.name" class="grid-item-image" />
+            <div class="grid-item-info">
+              <div class="grid-item-name">{{ artist.name }}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="results-section" *ngIf="albums.length > 0">
+        <h2 class="section-title">Álbumes</h2>
+        <div class="grid-list">
+          <div
+            *ngFor="let album of albums"
+            class="grid-item album-card"
+            (click)="onAlbumClick(album)"
+          >
+            <img [src]="album.imageUrl" [alt]="album.name" class="grid-item-image" />
+            <div class="grid-item-info">
+              <div class="grid-item-name">{{ album.name }}</div>
+              <div class="grid-item-subtitle">{{ album.artist }}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
 </div>

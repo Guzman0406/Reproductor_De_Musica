@@ -1,8 +1,12 @@
 import { Observable } from 'rxjs';
+import { Album } from '../models/album.model';
+import { Artist } from '../models/artist.model';
+import { SearchResult } from '../models/search-result.model';
 import { Song } from '../models/song.model';
 
-// Puerta estandar donde se piden canciones
 export abstract class SongRepository {
-  abstract search(query: string): Observable<Song[]>; //Buscar canciones por nombres
-  abstract getTrack(id: string): Observable<Song | null>; // Pedir una canción por su numero
+  abstract search(query: string): Observable<SearchResult>;
+  abstract getTrack(id: string): Observable<Song | null>;
+  abstract getAlbumTracks(albumId: string): Observable<Song[]>;
+  abstract getRecommendations(artistIds: string[]): Observable<Artist[]>;
 }

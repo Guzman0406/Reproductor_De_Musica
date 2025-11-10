@@ -1,16 +1,24 @@
 <main class="main-container">
   <header class="main-header">
     <h1 class="app-title">Reproductor de Música</h1>
-    <app-search-bar
-      (search)="handleSearch($event)"
-      (querySuggestion)="handleSuggestion($event)">
-    </app-search-bar>
+    <app-search-bar (search)="handleSearch($event)"></app-search-bar>
   </header>
 
   <section class="content-area">
+    <!-- Header del Álbum Seleccionado -->
+    <app-album-header
+      *ngIf="selectedAlbum$ | async as selectedAlbum"
+      [album]="selectedAlbum"
+    ></app-album-header>
+
+    <!-- Resultados de Búsqueda -->
     <app-search-results
-      [songs]="(searchResults$ | async) || []"
+      [songs]="(songs$ | async) || []"
+      [artists]="(artists$ | async) || []"
+      [albums]="(albums$ | async) || []"
       (songSelected)="handleSongSelected($event)"
+      (albumSelected)="handleAlbumSelected($event)"
+      (loadMore)="handleLoadMore()"
     ></app-search-results>
   </section>
 
