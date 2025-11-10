@@ -53,7 +53,6 @@ export class SpotifyAdapter extends SongRepository {
     super();
   }
 
-  // Búsqueda unificada de canciones, artistas y álbumes
   override search(query: string): Observable<SearchResult> {
     const params = new HttpParams()
       .set('q', query)
@@ -69,27 +68,24 @@ export class SpotifyAdapter extends SongRepository {
     );
   }
 
-  // Obtener las canciones de un álbum específico
   override getAlbumTracks(albumId: string): Observable<Song[]> {
     const albumDetails$ = this.http.get<SpotifyAlbum>(`${this.apiUrl}/albums/${albumId}`);
     const albumTracks$ = this.http.get<{ items: SpotifyTrack[] }>(`${this.apiUrl}/albums/${albumId}/tracks`);
 
     return forkJoin([albumDetails$, albumTracks$]).pipe(
       map(([albumDetails, tracksResponse]) => {
-        // Combina los detalles del álbum con cada pista
         return tracksResponse.items.map(track => ({
           id: track.id,
           title: track.name,
           artist: track.artists.map(a => a.name).join(', '),
-          album: albumDetails.name, // Usa el nombre del álbum de la primera llamada
-          imageUrl: albumDetails.images[0]?.url || '', // Usa la imagen del álbum
+          album: albumDetails.name,
+          imageUrl: albumDetails.images[0]?.url || '',
           previewUrl: track.preview_url,
         }));
       })
     );
   }
 
-  // Obtener recomendaciones basadas en artistas semilla
   override getRecommendations(artistIds: string[]): Observable<Artist[]> {
     const params = new HttpParams().set('seed_artists', artistIds.join(',')).set('limit', '20');
 
@@ -97,7 +93,6 @@ export class SpotifyAdapter extends SongRepository {
       .get<SpotifyRecommendationsResponse>(`${this.apiUrl}/recommendations`, { params })
       .pipe(
         map(response => {
-          // Extraer artistas únicos de las pistas recomendadas
           const artists: Artist[] = [];
           const artistIds = new Set<string>();
           response.tracks.forEach(track => {
@@ -107,7 +102,7 @@ export class SpotifyAdapter extends SongRepository {
                 artists.push({
                   id: artist.id,
                   name: artist.name,
-                  imageUrl: track.album?.images[0]?.url || '', // Usar imagen del álbum como fallback
+                  imageUrl: track.album?.images[0]?.url || '',
                 });
               }
             });
@@ -134,13 +129,25 @@ export class SpotifyAdapter extends SongRepository {
   }
 
   override getArtistTopTracks(artistId: string): Observable<Song[]> {
-    // El mercado es requerido, puedes ajustarlo según tu necesidad
     const params = new HttpParams().set('market', 'ES');
 
     return this.http
       .get<{ tracks: SpotifyTrack[] }>(`${this.apiUrl}/artists/${artistId}/top-tracks`, { params })
       .pipe(
         map(response => this.mapToSongs(response.tracks))
+      );
+  }
+
+  override getArtistAlbums(artistId: string): Observable<Album[]> {
+    const params = new HttpParams()
+      .set('market', 'ES')
+      .set('limit', '20')
+      .set('include_groups', 'album,single,compilation');
+
+    return this.http
+      .get<{ items: SpotifyAlbum[] }>(`${this.apiUrl}/artists/${artistId}/albums`, { params })
+      .pipe(
+        map(response => this.mapToAlbums(response.items))
       );
   }
 

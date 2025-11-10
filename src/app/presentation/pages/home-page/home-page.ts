@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable, Subscription } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { PlayerService } from '../../../application/player.service';
 import { SearchService } from '../../../application/search.service';
@@ -28,13 +28,11 @@ import { SongDisplayComponent } from '../../components/song-display/song-display
   ],
 })
 export class HomePageComponent implements OnDestroy {
-  // Subjects para mantener el estado
   private songs = new BehaviorSubject<Song[]>([]);
   private artists = new BehaviorSubject<Artist[]>([]);
   private albums = new BehaviorSubject<Album[]>([]);
   private selectedAlbum = new BehaviorSubject<Album | null>(null);
 
-  // Observables públicos para la plantilla
   public songs$: Observable<Song[]> = this.songs.asObservable();
   public artists$: Observable<Artist[]> = this.artists.asObservable();
   public albums$: Observable<Album[]> = this.albums.asObservable();
@@ -52,9 +50,8 @@ export class HomePageComponent implements OnDestroy {
       .subscribe(state => (this.playerState = state));
   }
 
-  // Maneja la búsqueda y actualiza los resultados
   handleSearch(query: string): void {
-    this.selectedAlbum.next(null); // Limpia el header del álbum al buscar
+    this.selectedAlbum.next(null);
     if (!query) {
       this.songs.next([]);
       this.artists.next([]);
@@ -69,32 +66,28 @@ export class HomePageComponent implements OnDestroy {
     });
   }
 
-  // Al seleccionar un álbum, busca sus canciones y lo establece como seleccionado
   handleAlbumSelected(albumId: string): void {
-    // Busca el álbum completo en la lista actual para obtener sus detalles
     const selected = this.albums.getValue().find(a => a.id === albumId);
     this.selectedAlbum.next(selected || null);
 
-    // Carga las canciones del álbum
     this.searchService.getAlbumTracks(albumId).subscribe(tracks => {
       this.songs.next(tracks);
-      // Ya no se limpian los artistas y álbumes
     });
   }
 
-  // Al seleccionar un artista, busca sus canciones más populares
   handleArtistSelected(artistId: string): void {
-    // Limpia el álbum seleccionado cuando se selecciona un artista
     this.selectedAlbum.next(null);
 
-    // Carga las canciones más populares del artista
-    this.searchService.getArtistTopTracks(artistId).subscribe(tracks => {
+    forkJoin({
+      tracks: this.searchService.getArtistTopTracks(artistId),
+      albums: this.searchService.getArtistAlbums(artistId)
+    }).subscribe(({ tracks, albums }) => {
       this.songs.next(tracks);
+      this.albums.next(albums);
       window.scrollTo(0, 0);
     });
   }
 
-  // Carga más recomendaciones de artistas
   handleLoadMore(): void {
     this.artists$
       .pipe(
@@ -114,7 +107,6 @@ export class HomePageComponent implements OnDestroy {
       .subscribe();
   }
 
-  // Carga la canción seleccionada en el reproductor
   handleSongSelected(song: Song): void {
     this.songs$
       .pipe(take(1))
